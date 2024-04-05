@@ -7,7 +7,9 @@ class HSensor
 public:
     HSensor(int sensorPin);
     ~HSensor();
-
+    isDry();
+    isWet();
+    
     int getHumidity();
 
 private:
