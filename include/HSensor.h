@@ -1,12 +1,12 @@
-#ifndef Sensor.h
-#define Sensor .h
+#ifndef SENSOR_H
+#define SENSOR_H
 #include <Arduino.h>
 
-class HumiditySensor
+class HSensor
 {
 public:
-    HumiditySensor(int sensorPin);
-    ~HumiditySensor();
+    HSensor(int sensorPin);
+    ~HSensor();
 
     int getHumidity();
 
