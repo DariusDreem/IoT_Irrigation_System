@@ -49,12 +49,31 @@ int CalculateTimeToWait(int desiredHour) // A vérifier
 bool NeedIrrigation()
 {
   // Dis si le sol est sec donc besoin d'irrigation
-  return if (analogRead(sensorPin) > 300);
+  return if (analogRead(sensorPin) < 300);
 }
 
 void loop()
 {
+  // Dors en fonction du temps de timeToWait
+
   // Démarrage a 7h (normalement)
+
+  // for (int i = 7 ; i < 9 ; i++)
+  // {
+  // if (needIrrigation())
+  // {
+  // motor.Start();
+  // delay(5000);
+  // motor.Stop();
+  // break;
+  // }
+  // else
+  // {
+  // Dors 1h
+  // }
+  // }
+  // CalculateTimeToWait(7);
+  // reviens au début de loop
 
   // Si le sol est sec
   if (NeedIrrigation())
