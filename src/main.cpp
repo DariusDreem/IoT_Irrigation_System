@@ -57,7 +57,7 @@ void loop()
   // Dors en fonction du temps de timeToWait
 
   // Démarrage a 7h (normalement)
-
+  // vérifie si l'heure est bien égale à 7h
   // for (int i = 7 ; i < 9 ; i++)
   // {
   // if (needIrrigation())
@@ -90,4 +90,3 @@ void loop()
   timeToWait = CalculateTimeToWait(7);
 }
 // vérifier si son interne n'est pas déréglé
-}
