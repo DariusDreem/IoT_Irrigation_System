@@ -1,4 +1,4 @@
-#include "hSensor.h"
+#include "HSensor.h"
 
 HSensor::HSensor(int sensorPin)
 {
@@ -24,4 +24,3 @@ bool HSensor::isDry()
 {
     return !isWet();
 }
-

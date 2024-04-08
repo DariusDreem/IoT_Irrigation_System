@@ -1,92 +1,86 @@
-#include <Arduino.h>
+#include <WiFi.h>
+#include "time.h"
 #include "Motor.h"
-#include "HSensor.h"
-#include <time.h>
-#include <avr/sleep.h>
+#include "hSensor.h"
+#include <RTClib.h>
 
-int timeToWait = 0;
-time_t currentTime;
+RTC_DS3231 rtc;
 
-const int motorPin = 2;
-const int sensorPin = 3;
+// Replace with your network credentials
+const char *ssid = "your_SSID";
+const char *password = "your_PASSWORD";
 
+// Motor and humidity sensor pins
+const int motorPin = 5;   // Example pin for motor
+const int sensorPin = 34; // Example pin for humidity sensor
+
+// Create motor and sensor objects
+Motor waterPump(motorPin);
+HSensor soilSensor(sensorPin);
+
+// Time variables
+const int wakeHour = 6;      // Wake up at 7 AM
+const int sleepHour = 23;    // Go to sleep at 11 PM
+const int checkInterval = 1; // Check every hour after 8 AM
+
+// Function prototypes
 void setup()
 {
   Serial.begin(9600);
-  Motor motor(motorPin);
-  HSensor sensor(sensorPin);
+  // Serial.begin(115200);
+  // configTime(0, 0, "pool.ntp.org"); // GMT offset and daylight offset are set to 0
 
-  // Récupération de l'heure actuelle
-  time(&currentTime);
-  Serial.println(ctime(&currentTime));
+  const int motorPin = 5;   // Exemple de pin pour le moteur
+  const int sensorPin = 34; // Exemple de pin pour le capteur d'humidité
 
-  timeToWait = CalculateTimeToWait(7);
-}
-
-int CalculateTimeToWait(int desiredHour) // A vérifier
-{
-  // Récupération de l'heure actuelle
-  time_t currentTime;
-  time(&currentTime);
-
-  // Récupération de l'heure actuelle
-  struct tm *timeinfo;
-  timeinfo = localtime(&currentTime);
-
-  // Calcul du temps à attendre
-  int timeToWait = 0;
-  if (timeinfo->tm_hour < desiredHour)
-  {
-    timeToWait = (desiredHour - timeinfo->tm_hour) * 3600 * 1000;
-  }
-  else if (timeinfo->tm_hour >= desiredHour && timeinfo->tm_hour < 24)
-  {
-    timeToWait = ((24 - timeinfo->tm_hour + desiredHour) * 3600 * 1000);
-  }
-  return timeToWait;
-}
-
-bool NeedIrrigation()
-{
-  // Dis si le sol est sec donc besoin d'irrigation
-  return if (analogRead(sensorPin) < 300);
+  // config all pins
+  pinMode(motorPin, OUTPUT);
+  pinMode(sensorPin, INPUT);
 }
 
 void loop()
 {
-  // Dors en fonction du temps de timeToWait
+  // create a new Time object
+  Time time(ssid, password);
 
-  // Démarrage a 7h (normalement)
-  // vérifie si l'heure est bien égale à 7h
-  // for (int i = 7 ; i < 9 ; i++)
-  // {
-  // if (needIrrigation())
-  // {
-  // motor.Start();
-  // delay(5000);
-  // motor.Stop();
-  // break;
-  // }
-  // else
-  // {
-  // Dors 1h
-  // }
-  // }
-  // CalculateTimeToWait(7);
-  // reviens au début de loop
+  time.SyncronizationTime();
 
-  // Si le sol est sec
-  if (NeedIrrigation())
+  DateTime timeNow = rtc.now();
+
+  if (time.isTimeToIrrigate())
   {
-    motor.Start();
-    delay(5000);
-    motor.Stop();
+    for (size_t i = time.GetHour; i < 9; i++)
+    {
+      Serial.println("Check water of plant");
+      if (HSensor.isDry())
+      {
+        Serial.println("Watering plant");
+        // TODO : IRIGATE
+        // TODO : SLEEP DEEP
+        i++;
+      }
+      else
+      {
+        Serial.println("Plant is good");
+        time.sleepLightOneHour();
+        i++;
+      }
+    }
   }
 
-  // Récupération de l'heure actuelle
-  time(&currentTime);
-  Serial.println(ctime(&currentTime));
+  if (time.GetHour() < 6)
+  {
+    Serial.println("Sleeping deep until 6AM");
 
-  timeToWait = CalculateTimeToWait(7);
+    time.sleepLight(time.AlarmClock(6));
+  }
+  else if (time.GetHour() > 10)
+  {
+    if (HSensor.isDry())
+    {
+      Serial.println("Watering plant");
+      Motor.turnOn(1000);
+    }
+    time.sleepLight(time.AlarmClock(6));
+  }
 }
-// vérifier si son interne n'est pas déréglé
