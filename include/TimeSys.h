@@ -1,5 +1,5 @@
-#ifndef TIME_H
-#define TIME_H
+#ifndef TimeSys
+#define TimeSys
 
 class Time
 {
@@ -15,10 +15,10 @@ public:
     void SyncronizationTime();
     int GetHour();
     struct tm GetTimeNow();
-    long AlarmClock();
+    long AlarmClock(int targetTime);
     bool isTimeToIrrigate();
     void sleepLightOneHour();
     void sleepLight(int timeToSleep);
 };
 
-#endif // Time.h
+#endif // TimeSys.h

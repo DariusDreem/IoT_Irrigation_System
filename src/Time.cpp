@@ -1,8 +1,9 @@
-#include "Time.h"
+#include "TimeSys.h"
 
 #include <Arduino.h>
 #include <WiFi.h>
 #include <WiFiUdp.h> // Utilisez cette bibliothèque pour UDP
+#include <time.h>
 
 struct tm
 {
@@ -70,7 +71,7 @@ struct tm Time::GetTimeNow()
     return timeinfo;
 }
 
-long Time::AlarmClock()
+long Time::AlarmClock(int targetTime)
 {
     struct tm timeStruc = GetTimeNow();
     time_t timeNow = mktime(&timeStruc);
