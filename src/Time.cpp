@@ -2,6 +2,8 @@
 
 #include <Arduino.h>
 #include <WiFi.h>
+#include <time.h>
+#include <ctime>
 #include <WiFiUdp.h> // Utilisez cette bibliothèque pour UDP
 
 struct tm
@@ -69,6 +71,8 @@ struct tm Time::GetTimeNow()
     Serial.println(&timeinfo, "%H:%M:%S");
     return timeinfo;
 }
+
+#include <ctime>
 
 long Time::AlarmClock()
 {

@@ -8,6 +8,7 @@ public:
     Motor(int motorPin);
     ~Motor();
 
+    int motorPin;
     void turnOn(int ms);
     void turnOff();
 };

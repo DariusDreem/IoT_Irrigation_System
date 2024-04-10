@@ -29,13 +29,6 @@ void setup()
   Serial.begin(9600);
   // Serial.begin(115200);
   // configTime(0, 0, "pool.ntp.org"); // GMT offset and daylight offset are set to 0
-
-  const int motorPin = 5;   // Exemple de pin pour le moteur
-  const int sensorPin = 34; // Exemple de pin pour le capteur d'humidité
-
-  // config all pins
-  pinMode(motorPin, OUTPUT);
-  pinMode(sensorPin, INPUT);
 }
 
 void loop()
@@ -56,14 +49,15 @@ void loop()
       {
         Serial.println("Watering plant");
         // TODO : IRIGATE
+        Motor.turnOn(1000);
         // TODO : SLEEP DEEP
-        i++;
+
+        ();
       }
       else
       {
         Serial.println("Plant is good");
         time.sleepLightOneHour();
-        i++;
       }
     }
   }

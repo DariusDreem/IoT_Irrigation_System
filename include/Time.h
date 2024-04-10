@@ -16,8 +16,10 @@ public:
     int GetHour();
     struct tm GetTimeNow();
     long AlarmClock();
+
     bool isTimeToIrrigate();
     void sleepLightOneHour();
+    void sleepDeepSleep();
     void sleepLight(int timeToSleep);
 };
 
