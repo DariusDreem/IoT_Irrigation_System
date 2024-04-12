@@ -1,7 +1,7 @@
 #include <WiFi.h>
-#include "time.h"
+#include "TimeSys.h"
 #include "Motor.h"
-#include "hSensor.h"
+#include "HSensor.h"
 #include <RTClib.h>
 
 RTC_DS3231 rtc;
@@ -42,17 +42,15 @@ void loop()
 
   if (time.isTimeToIrrigate())
   {
-    for (size_t i = time.GetHour; i < 9; i++)
+    for (size_t i = time.GetHour(); i < 9; i++)
     {
       Serial.println("Check water of plant");
-      if (HSensor.isDry())
+      if (soilSensor.isDry())
       {
         Serial.println("Watering plant");
         // TODO : IRIGATE
-        Motor.turnOn(1000);
+        waterPump.turnOn(1000);
         // TODO : SLEEP DEEP
-
-        ();
       }
       else
       {
@@ -70,10 +68,10 @@ void loop()
   }
   else if (time.GetHour() > 10)
   {
-    if (HSensor.isDry())
+    if (soilSensor.isDry())
     {
       Serial.println("Watering plant");
-      Motor.turnOn(1000);
+      waterPump.turnOn(1000);
     }
     time.sleepLight(time.AlarmClock(6));
   }

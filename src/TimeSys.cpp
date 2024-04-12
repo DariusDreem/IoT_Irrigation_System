@@ -6,19 +6,7 @@
 #include <ctime>
 #include <WiFiUdp.h> // Utilisez cette bibliothèque pour UDP
 #include <time.h>
-
-struct tm
-{
-    int tm_sec;   // Secondes (0-59)
-    int tm_min;   // Minutes (0-59)
-    int tm_hour;  // Heures (0-23)
-    int tm_mday;  // Jour du mois (1-31)
-    int tm_mon;   // Mois (0-11)
-    int tm_year;  // Année depuis 1900
-    int tm_wday;  // Jour de la semaine (0-6, dimanche = 0)
-    int tm_yday;  // Jour de l'année (0-365)
-    int tm_isdst; // Indicateur d'heure d'été (0, 1 ou -1)
-};
+#include <RTClib.h>
 
 WiFiUDP udp; // Créez une instance de la classe WiFiUDP
 
