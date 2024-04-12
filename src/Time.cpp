@@ -75,19 +75,19 @@ struct tm Time::GetTimeNow()
 
 #include <ctime>
 
-long Time::AlarmClock(int targetTime)
+double Time::AlarmClock(int targetTimeValue)
 {
     struct tm timeStruc = GetTimeNow();
     time_t timeNow = mktime(&timeStruc);
 
-    struct tm targetTimeStruct = heureActuelle;
-    targetTimeStruct.tm_hour = targetTime;
+    struct tm targetTimeStruct;
+    targetTimeStruct.tm_hour = targetTimeValue;
     targetTimeStruct.tm_min = 0;
     targetTimeStruct.tm_sec = 0;
 
-    time_t targetTime = mktime(&targetTimeStruct);
+    time_t targetTimeSys = mktime(&targetTimeStruct);
 
-    return difftime(targetTime, timeNow);
+    return difftime(targetTimeSys, timeNow);
 };
 
 bool Time::isTimeToIrrigate()
@@ -98,16 +98,18 @@ bool Time::isTimeToIrrigate()
     return currentHour == 6 || currentHour == 7 || currentHour == 8;
 }
 
-void sleepLightOneHour()
+void Time::sleepLightOneHour()
 {
     esp_sleep_enable_timer_wakeup(3600 * 1000000ULL); // Wake up after 1 hour
     esp_deep_sleep_start();
 }
 
-void sleepDeepSleep()
+void Time::sleepDeepSleep(int timeToSleepParam)
 {
-    long timeToSleep = AlarmClock();
-    esp_sleep_enable_timer_wakeup(3600 * 1000000ULL); // Wake up after 1 hour
+    long int timeToSleep = timeToSleepParam;
+    double sleepTime = AlarmClock(timeToSleepParam);
+    uint64_t uint64Value = static_cast<uint64_t>(sleepTime);
+    esp_sleep_enable_timer_wakeup(uint64Value * 1000000ULL); // Wake up after 1 hour
     Serial.println("Going to deep sleep, UwU ^^");
     esp_deep_sleep_start();
 }

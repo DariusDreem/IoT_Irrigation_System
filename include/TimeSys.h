@@ -15,10 +15,11 @@ public:
     void SyncronizationTime();
     int GetHour();
     struct tm GetTimeNow();
-    long AlarmClock(int targetTime);
+    double AlarmClock(int targetTime);
     bool isTimeToIrrigate();
     void sleepLightOneHour();
     void sleepLight(int timeToSleep);
+    void sleepDeepSleep(int timeToSleep);
 };
 
 #endif // TimeSys.h
