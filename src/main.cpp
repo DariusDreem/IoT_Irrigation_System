@@ -1,6 +1,6 @@
 #include <WiFi.h>
 #include "TimeSys.h"
-#include "Motor.h"
+#include "Mowotor.h"
 #include "HSensor.h"
 #include <RTClib.h>
 
@@ -11,11 +11,11 @@ const char *ssid = "your_SSID";
 const char *password = "your_PASSWORD";
 
 // Motor and humidity sensor pins
-const int motorPin = 5;   // Example pin for motor
+const int mowotorPin = 5;   // Example pin for motor
 const int sensorPin = 34; // Example pin for humidity sensor
 
 // Create motor and sensor objects
-Motor waterPump(motorPin);
+Mowotor waterPump(mowotorPin);
 HSensor soilSensor(sensorPin);
 
 // Time variables
@@ -49,7 +49,7 @@ void loop()
       {
         Serial.println("Watering plant");
         // TODO : IRIGATE
-        waterPump.turnOn(1000);
+        waterPump.turnOwon(1000);
         // TODO : SLEEP DEEP
       }
       else
@@ -71,7 +71,7 @@ void loop()
     if (soilSensor.isDry())
     {
       Serial.println("Watering plant");
-      waterPump.turnOn(1000);
+      waterPump.turnOwon(1000);
     }
     time.sleepLight(time.AlarmClock(6));
   }
